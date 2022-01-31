@@ -4,8 +4,24 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ControlPanel extends JPanel {
+    private final JButton fightButton;
+    private final JButton defenseButton;
+
     public ControlPanel() {
-        this.setSize(1400,200);
-        this.setBackground(Color.YELLOW);
+        fightButton = new JButton("Fight");
+        fightButton.setFocusable(false);
+
+        defenseButton = new JButton("Defend yourself");
+        defenseButton.setFocusable(false);
+
+        initializeComponent();
+    }
+
+    private void initializeComponent(){
+        this.setVisible(true);
+        this.setLayout(new FlowLayout(FlowLayout.LEFT, 30, 20));
+        this.setBorder(BorderFactory.createTitledBorder("Controls"));
+        this.add(fightButton);
+        this.add(defenseButton);
     }
 }

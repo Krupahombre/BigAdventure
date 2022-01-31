@@ -20,7 +20,7 @@ public class MainFrame extends JFrame {
         initializeComponents();
     }
 
-    public void initializeComponents() {
+    private void initializeComponents() {
         actionPanel = new ActionPanel();
         controlPanel = new ControlPanel();
         logPanel = new LogPanel();
