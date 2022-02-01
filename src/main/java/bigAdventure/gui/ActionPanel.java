@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.util.List;
 
 public class ActionPanel extends JPanel implements RenderArea {
@@ -41,11 +40,17 @@ public class ActionPanel extends JPanel implements RenderArea {
         });
     }
 
+    private void clearAndCopyBackBufferToScreen(){
+        final var backBufferGraphics = (Graphics2D) this.backBuffer.getGraphics();
+        backBufferGraphics.clearRect(0,0, this.getWidth(), this.getHeight());
+        this.getGraphics().drawImage(this.backBuffer, 0 ,0, null);
+        backBufferGraphics.dispose();
+    }
+
     @Override
     public void renderNextFrame(List<Renderable> renderables) {
 
         final var screen = (Graphics2D) this.backBuffer.getGraphics();
-        screen.clearRect(0,0, this.getWidth(), this.getHeight());
 
         for (var renderable : renderables){
             final var originalTransform = screen.getTransform();
@@ -62,9 +67,8 @@ public class ActionPanel extends JPanel implements RenderArea {
             screen.setColor(originalColor);
             screen.drawImage(renderable.getImage(), originalTransform, null);
         }
-        //this.paintComponent(screen);
-        this.getGraphics().drawImage(this.backBuffer, 0 ,0, null);
         screen.dispose();
+        clearAndCopyBackBufferToScreen();
     }
 
     @Override
