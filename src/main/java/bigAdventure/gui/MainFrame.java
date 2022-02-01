@@ -1,15 +1,23 @@
 package bigAdventure.gui;
 
+import bigAdventure.rendering.RectangleRenderable;
+import bigAdventure.rendering.RenderArea;
+import bigAdventure.rendering.Renderable;
+import bigAdventure.rendering.RenderingThread;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Point2D;
+import java.util.List;
 
-public class MainFrame extends JFrame {
+public class MainFrame extends JFrame{
     private final int WINDOW_WIDTH = 1400;
     private final int WINDOW_HEIGHT = 800;
     private ActionPanel actionPanel;
     private ControlPanel controlPanel;
     private LogPanel logPanel;
     private ProfilePanel profilePanel;
+
 
     public MainFrame() throws HeadlessException {
         this.setTitle("BigAdventure");
@@ -31,4 +39,6 @@ public class MainFrame extends JFrame {
         this.add(logPanel, BorderLayout.WEST);
         this.add(profilePanel, BorderLayout.EAST);
     }
+
+
 }
