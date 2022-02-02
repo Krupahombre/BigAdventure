@@ -12,5 +12,5 @@ public interface NextFrameAction {
      * Action that will happen before next frame will be rendered .
      * @param thisRenderable - object implementing {@link Renderable} that this action was assigned to.
      */
-    void execute(Renderable thisRenderable);
+    void execute(Renderable thisRenderable, double deltaTime);
 }

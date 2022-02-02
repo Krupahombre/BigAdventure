@@ -12,16 +12,16 @@ public class ControlPanel extends JPanel {
     public ControlPanel(ActionPanel actionPanel) {
         fightButton = new JButton("Fight");
         fightButton.setFocusable(false);
-        fightButton.addActionListener( (e) -> actionPanel.moveBlue(10,1));
+        fightButton.addActionListener( (e) -> actionPanel.moveBlue(1000,1));
 
         defenseButton = new JButton("Defend yourself");
         defenseButton.setFocusable(false);
-        defenseButton.addActionListener( (e) -> actionPanel.moveRed(10,0));
+        defenseButton.addActionListener( (e) -> actionPanel.moveRed(1000,0));
         defenseButton.addActionListener( (e) -> health());
 
         runButton = new JButton("Run");
         runButton.setFocusable(false);
-        runButton.addActionListener( (e) -> actionPanel.moveRed(30,15));
+        runButton.addActionListener( (e) -> actionPanel.moveRed(2000,15));
 
         healthBar = new JProgressBar(0,100);
         healthBar.setPreferredSize(new Dimension(800,70));

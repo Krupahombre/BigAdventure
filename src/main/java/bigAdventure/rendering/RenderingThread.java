@@ -105,7 +105,7 @@ public final class RenderingThread extends Thread {
         for (var renderable : renderablesToDraw){
             var action = renderable.getActionInNextFrame();
             if (action != null)
-                transformThreads.submit(() -> action.execute(renderable));
+                transformThreads.submit(() -> action.execute(renderable, deltaTime));
         }
         transformThreads.shutdown();
         try {
