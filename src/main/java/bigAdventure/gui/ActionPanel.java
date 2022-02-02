@@ -22,7 +22,6 @@ public class ActionPanel extends JPanel implements RenderArea {
     private final Renderable red;
 
     public ActionPanel() {
-        this.setSize(800,600);
         this.setBackground(Color.WHITE);
         this.setIgnoreRepaint(true);
         this.setDoubleBuffered(false);
@@ -51,6 +50,7 @@ public class ActionPanel extends JPanel implements RenderArea {
             backBuffer = createImage(getWidth(), getHeight());
             renderingThread.start();
         });
+        this.setVisible(true);
     }
 
     public void moveBlue(int offsetX, int offsetY){

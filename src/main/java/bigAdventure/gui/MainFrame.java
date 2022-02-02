@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class MainFrame extends JFrame{
-    private final int WINDOW_WIDTH = 1400;
+    private final int WINDOW_WIDTH = 1700;
     private final int WINDOW_HEIGHT = 800;
     private final ActionPanel actionPanel;
     private final ControlPanel controlPanel;
