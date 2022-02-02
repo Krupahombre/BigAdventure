@@ -14,7 +14,7 @@ public class MainFrame extends JFrame{
 
     public MainFrame() throws HeadlessException {
         actionPanel = new ActionPanel();
-        controlPanel = new ControlPanel();
+        controlPanel = new ControlPanel(actionPanel);
         logPanel = new LogPanel();
         profilePanel = new ProfilePanel();
 

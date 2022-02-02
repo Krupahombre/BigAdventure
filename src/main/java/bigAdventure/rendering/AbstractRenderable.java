@@ -27,7 +27,7 @@ public abstract class AbstractRenderable implements Renderable {
 
     @Override
     public Image getImage() {
-        return null;
+        return this.image;
     }
 
     @Override
