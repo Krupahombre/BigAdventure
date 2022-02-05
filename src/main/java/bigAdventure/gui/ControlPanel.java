@@ -9,19 +9,22 @@ public class ControlPanel extends JPanel {
     private final JProgressBar healthBar;
     private final JButton runButton;
 
-    public ControlPanel(ActionPanel actionPanel) {
+    public ControlPanel(ActionPanel actionPanel, LogPanel logPanel) {
         fightButton = new JButton("Fight");
         fightButton.setFocusable(false);
         fightButton.addActionListener( (e) -> actionPanel.moveBlue(1000,1));
+        fightButton.addActionListener( (e) -> logPanel.printLog("You are punching the enemy"));
 
         defenseButton = new JButton("Defend yourself");
         defenseButton.setFocusable(false);
         defenseButton.addActionListener( (e) -> actionPanel.moveRed(1000,0));
         defenseButton.addActionListener( (e) -> health());
+        defenseButton.addActionListener( (e) -> logPanel.printLog("You are defending yourself"));
 
         runButton = new JButton("Run");
         runButton.setFocusable(false);
         runButton.addActionListener( (e) -> actionPanel.moveRed(2000,15));
+        runButton.addActionListener( (e) -> logPanel.printLog("You are running away"));
 
         healthBar = new JProgressBar(0,100);
         healthBar.setPreferredSize(new Dimension(800,70));
