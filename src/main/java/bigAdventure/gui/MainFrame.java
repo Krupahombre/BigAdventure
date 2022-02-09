@@ -1,5 +1,7 @@
 package bigAdventure.gui;
 
+import bigAdventure.entities.*;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -10,13 +12,18 @@ public class MainFrame extends JFrame{
     private final ControlPanel controlPanel;
     private final LogPanel logPanel;
     private final ProfilePanel profilePanel;
+    private final Player player;
+    private final Enemy enemy;
 
 
     public MainFrame() throws HeadlessException {
+        player = new Player("Rycerz", 100,20);
+        enemy = new Enemy("Zombie", 60, 2);
+
         actionPanel = new ActionPanel();
         logPanel = new LogPanel();
         profilePanel = new ProfilePanel();
-        controlPanel = new ControlPanel(actionPanel, logPanel);
+        controlPanel = new ControlPanel(actionPanel, logPanel, profilePanel, player, enemy);
 
         initializeComponents();
     }

@@ -9,8 +9,8 @@ public class ProfilePanel extends JPanel {
     private final JLabel room;
     private final JLabel enemy;
     private final JLabel gold;
-    private int roomCounter = 4;
-    private int enemyCounter = 2;
+    private int roomCounter = 0;
+    private int enemyCounter = 0;
     private int goldCounter = 0;
     private final ImageIcon avatarIcon = new ImageIcon("src/main/resources/Arecki.jpg");
     private final Border avatarBorder = BorderFactory.createLineBorder(Color.DARK_GRAY,2);
@@ -42,5 +42,32 @@ public class ProfilePanel extends JPanel {
         this.add(room);
         this.add(enemy);
         this.add(gold);
+    }
+
+    public int getRoomCounter() {
+        return roomCounter;
+    }
+
+    public void setRoomCounter(int roomCounter) {
+        this.roomCounter = roomCounter;
+        room.setText("Discovered rooms: " + this.roomCounter);
+    }
+
+    public int getEnemyCounter() {
+        return enemyCounter;
+    }
+
+    public void setEnemyCounter(int enemyCounter) {
+        this.enemyCounter = enemyCounter;
+        enemy.setText("Conquered enemies: " + this.enemyCounter);
+    }
+
+    public int getGoldCounter() {
+        return goldCounter;
+    }
+
+    public void setGoldCounter(int goldCounter) {
+        this.goldCounter = goldCounter;
+        gold.setText("Collected gold: " + this.goldCounter);
     }
 }
