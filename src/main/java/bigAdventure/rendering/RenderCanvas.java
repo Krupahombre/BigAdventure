@@ -34,8 +34,9 @@ public class RenderCanvas extends Canvas implements RenderArea {
             final var originalTransform = screen.getTransform();
             final var originalColor = screen.getColor();
 
+            screen.setTransform(renderable.getCurrentAffineTransform());
             if (renderable.getShape() != null){
-                screen.setTransform(renderable.getCurrentAffineTransform());
+
                 screen.setColor(renderable.getColor());
                 screen.setStroke(new BasicStroke(1));
                 screen.fill(renderable.getShape());

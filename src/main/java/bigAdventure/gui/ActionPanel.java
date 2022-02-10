@@ -4,6 +4,7 @@ import bigAdventure.rendering.RectangleRenderable;
 import bigAdventure.rendering.RenderCanvas;
 import bigAdventure.rendering.Renderable;
 import bigAdventure.rendering.RenderingThread;
+import bigAdventure.rendering.sprite.Sprite;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -12,14 +13,18 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class ActionPanel extends JPanel {
 
     private final RenderingThread renderingThread;
     private final RenderCanvas renderCanvas;
     private final Renderable blue;
-    private final Renderable red;
+    private Renderable red;
 
     public ActionPanel() {
         this.setBackground(Color.WHITE);
@@ -32,15 +37,22 @@ public class ActionPanel extends JPanel {
 
         this.renderCanvas = new RenderCanvas();
 
-        renderingThread = new RenderingThread(renderCanvas, 16);
+        renderingThread = new RenderingThread(renderCanvas, 150);
 
         blue = new RectangleRenderable(new Point2D.Double(100,100),200,200);
-        red = new RectangleRenderable(new Point2D.Double(50,50),100,200);
+
 
         blue.setColor(Color.BLUE);
         //red.setColor(Color.RED);
         try {
-            red.setImage(ImageIO.read(this.getClass().getResourceAsStream("/sprites/black_knight/tile000.png")));
+            List<Image> tiles = new ArrayList<>(50);
+            File tilesDir = new File(getClass().getResource("/sprites/green_knight/tile000.png").getPath());
+            var tileFiles = tilesDir.getParentFile().listFiles();
+            for (var tileFile : tileFiles){
+                tiles.add(ImageIO.read(tileFile));
+            }
+            red = new Sprite(Map.of("test_animation", tiles), "test_animation");
+
         } catch (IOException e){
             e.printStackTrace();
         }
