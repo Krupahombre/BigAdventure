@@ -1,6 +1,9 @@
 package bigAdventure.gui;
 
-import bigAdventure.rendering.*;
+import bigAdventure.rendering.RectangleRenderable;
+import bigAdventure.rendering.RenderCanvas;
+import bigAdventure.rendering.Renderable;
+import bigAdventure.rendering.RenderingThread;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -9,9 +12,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.List;
 
 public class ActionPanel extends JPanel {
 
@@ -39,7 +40,7 @@ public class ActionPanel extends JPanel {
         blue.setColor(Color.BLUE);
         //red.setColor(Color.RED);
         try {
-            red.setImage(ImageIO.read(this.getClass().getResourceAsStream("/AdamantKnight.png")));
+            red.setImage(ImageIO.read(this.getClass().getResourceAsStream("/sprites/black_knight/tile000.png")));
         } catch (IOException e){
             e.printStackTrace();
         }

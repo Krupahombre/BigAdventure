@@ -3,7 +3,6 @@ package bigAdventure.rendering;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Area;
-import java.awt.image.BufferedImage;
 
 public abstract class AbstractRenderable implements Renderable {
 
@@ -13,12 +12,10 @@ public abstract class AbstractRenderable implements Renderable {
     private Image image;
     private Color color;
 
-
     public AbstractRenderable(Shape shape) {
         this.shapeArea = new Area(shape);
         this.currentTransform = new AffineTransform();
     }
-
 
     @Override
     public Shape getShape() {
