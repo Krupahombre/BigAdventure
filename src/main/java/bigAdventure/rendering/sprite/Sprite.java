@@ -3,6 +3,7 @@ package bigAdventure.rendering.sprite;
 import bigAdventure.exceptions.InvalidAnimationException;
 import bigAdventure.rendering.NextFrameAction;
 import bigAdventure.rendering.Renderable;
+import bigAdventure.rendering.animation.AnimationSequence;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
@@ -10,28 +11,18 @@ import java.util.*;
 import java.util.List;
 
 public class Sprite implements Renderable {
-
-    private Map<String, List<Image>> availableAnimations;
-    private List<Image> activeAnimation;
-    private Image activeAnimationFrame;
-    private AffineTransform currentAffineTransform = new AffineTransform();
+    private Image image;
+    private AffineTransform currentAffineTransform;
     private NextFrameAction nextFrameAction;
-    private Iterator<Image> currentAnimationFrameIterator;
+
 
     public Sprite() {
-        this.availableAnimations = new HashMap<>();
-        this.activeAnimation = new ArrayList<>();
-        this.currentAnimationFrameIterator = this.activeAnimation.listIterator();
+        this.currentAffineTransform = new AffineTransform();
     }
 
-    public Sprite(Map<String, List<Image>> availableAnimations, String activeAnimation) {
-        this.availableAnimations = availableAnimations;
-        this.activeAnimation = availableAnimations.get(activeAnimation);
-        this.currentAnimationFrameIterator = this.activeAnimation.listIterator(0);
-
-        if (this.activeAnimation == null)
-            throw new InvalidAnimationException(
-                    String.format("Specified animation '%s' does not exist", activeAnimation));
+    public Sprite(Image image) {
+        this();
+        this.image = image;
     }
 
     @Override
@@ -41,12 +32,12 @@ public class Sprite implements Renderable {
 
     @Override
     public Image getImage() {
-        return activeAnimationFrame;
+        return image;
     }
 
     @Override
     public void setImage(Image image) {
-        this.activeAnimationFrame = image;
+        this.image = image;
     }
 
     @Override
@@ -81,32 +72,6 @@ public class Sprite implements Renderable {
 
     @Override
     public NextFrameAction getActionInNextFrame() {
-        return (renderable, deltaTime) -> {
-            if(this.nextFrameAction != null)
-                this.nextFrameAction.execute(renderable, deltaTime);
-            this.animate();
-        };
+        return this.nextFrameAction;
     }
-
-    public void setActiveAnimation(String name){
-        var animation = this.availableAnimations.get(name);
-        if (animation == null)
-            throw new InvalidAnimationException(
-                    String.format("Specified animation '%s' does not exist", activeAnimation));
-        this.activeAnimation = animation;
-        this.currentAnimationFrameIterator = activeAnimation.listIterator(0);
-    }
-
-    private void animate(){
-        if (this.activeAnimation.isEmpty()) return;
-        if (this.activeAnimation.size() == 1){
-            this.activeAnimationFrame = this.activeAnimation.get(0);
-            return;
-        }
-        if (!this.currentAnimationFrameIterator.hasNext()){
-            this.currentAnimationFrameIterator = this.activeAnimation.listIterator(0);
-        }
-        this.activeAnimationFrame = this.currentAnimationFrameIterator.next();
-    }
-
 }

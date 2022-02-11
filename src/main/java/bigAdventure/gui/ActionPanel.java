@@ -1,9 +1,11 @@
 package bigAdventure.gui;
 
-import bigAdventure.rendering.RectangleRenderable;
 import bigAdventure.rendering.RenderCanvas;
-import bigAdventure.rendering.Renderable;
 import bigAdventure.rendering.RenderingThread;
+import bigAdventure.rendering.animation.AnimatingType;
+import bigAdventure.rendering.animation.AnimationSequence;
+import bigAdventure.rendering.animation.AnimationsMap;
+import bigAdventure.rendering.sprite.AnimatedSprite;
 import bigAdventure.rendering.sprite.Sprite;
 
 import javax.imageio.ImageIO;
@@ -12,19 +14,17 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
 import java.util.Map;
 
 public class ActionPanel extends JPanel {
 
     private final RenderingThread renderingThread;
     private final RenderCanvas renderCanvas;
-    private final Renderable blue;
-    private Renderable red;
+    private Sprite blue;
+    private AnimatedSprite red;
 
     public ActionPanel() {
         this.setBackground(Color.WHITE);
@@ -36,22 +36,21 @@ public class ActionPanel extends JPanel {
         this.setLayout(new BorderLayout(40,40));
 
         this.renderCanvas = new RenderCanvas();
+        renderingThread = new RenderingThread(renderCanvas, 16);
 
-        renderingThread = new RenderingThread(renderCanvas, 150);
-
-        blue = new RectangleRenderable(new Point2D.Double(100,100),200,200);
-
-
-        blue.setColor(Color.BLUE);
-        //red.setColor(Color.RED);
         try {
-            List<Image> tiles = new ArrayList<>(50);
+            blue = new Sprite(ImageIO.read(getClass().getResource("/sprites/black_knight/tile000.png")));
+            AnimationSequence animationSequence = new AnimationSequence(8);
             File tilesDir = new File(getClass().getResource("/sprites/green_knight/tile000.png").getPath());
             var tileFiles = tilesDir.getParentFile().listFiles();
-            for (var tileFile : tileFiles){
-                tiles.add(ImageIO.read(tileFile));
+            Arrays.sort(tileFiles);
+
+            for (int i = 40; i < 50; i++){
+                animationSequence.add(ImageIO.read(tileFiles[i]));
             }
-            red = new Sprite(Map.of("test_animation", tiles), "test_animation");
+            red = new AnimatedSprite(new AnimationsMap(Map.of("test_animation", animationSequence)));
+            red.setActiveAnimationSequence("test_animation", AnimatingType.FORWARDED);
+            red.setIsAnimating(true);
 
         } catch (IOException e){
             e.printStackTrace();
