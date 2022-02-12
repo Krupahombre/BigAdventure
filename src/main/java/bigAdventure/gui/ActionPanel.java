@@ -1,9 +1,14 @@
 package bigAdventure.gui;
 
-import bigAdventure.rendering.RectangleRenderable;
+import bigAdventure.global.GameResources;
 import bigAdventure.rendering.RenderCanvas;
-import bigAdventure.rendering.Renderable;
 import bigAdventure.rendering.RenderingThread;
+import bigAdventure.rendering.animation.AnimatingType;
+import bigAdventure.rendering.animation.AnimationSequence;
+import bigAdventure.rendering.animation.AnimationsMap;
+import bigAdventure.rendering.animation.LockedAnimationMap;
+import bigAdventure.rendering.sprite.AnimatedSprite;
+import bigAdventure.rendering.sprite.Sprite;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
@@ -11,15 +16,17 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.geom.AffineTransform;
-import java.awt.geom.Point2D;
+import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Map;
 
 public class ActionPanel extends JPanel {
 
     private final RenderingThread renderingThread;
     private final RenderCanvas renderCanvas;
-    private final Renderable blue;
-    private final Renderable red;
+    private Sprite blue;
+    private AnimatedSprite red;
 
     public ActionPanel() {
         this.setBackground(Color.WHITE);
@@ -31,19 +38,19 @@ public class ActionPanel extends JPanel {
         this.setLayout(new BorderLayout(40,40));
 
         this.renderCanvas = new RenderCanvas();
-
         renderingThread = new RenderingThread(renderCanvas, 16);
 
-        blue = new RectangleRenderable(new Point2D.Double(100,100),200,200);
-        red = new RectangleRenderable(new Point2D.Double(50,50),100,200);
+        blue = new Sprite(GameResources.getInstance()
+                .getStaticResourceAsImage("black_knight_static.png").get());
 
-        blue.setColor(Color.BLUE);
-        //red.setColor(Color.RED);
-        try {
-            red.setImage(ImageIO.read(this.getClass().getResourceAsStream("/sprites/black_knight/tile000.png")));
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+        var loadedAnimationMap = GameResources.getInstance()
+                .getAnimationMap("green_knight");
+
+
+        red = new AnimatedSprite(LockedAnimationMap.fromNonLocked(loadedAnimationMap, 10));
+        red.setActiveAnimationSequence("stand", AnimatingType.LOOPED);
+        red.setIsAnimating(true);
+
 
         renderingThread.addRenderable(blue);
         renderingThread.addRenderable(red);
