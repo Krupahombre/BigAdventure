@@ -1,10 +1,12 @@
 package bigAdventure.gui;
 
+import bigAdventure.global.GameResources;
 import bigAdventure.rendering.RenderCanvas;
 import bigAdventure.rendering.RenderingThread;
 import bigAdventure.rendering.animation.AnimatingType;
 import bigAdventure.rendering.animation.AnimationSequence;
 import bigAdventure.rendering.animation.AnimationsMap;
+import bigAdventure.rendering.animation.LockedAnimationMap;
 import bigAdventure.rendering.sprite.AnimatedSprite;
 import bigAdventure.rendering.sprite.Sprite;
 
@@ -38,23 +40,17 @@ public class ActionPanel extends JPanel {
         this.renderCanvas = new RenderCanvas();
         renderingThread = new RenderingThread(renderCanvas, 16);
 
-        try {
-            blue = new Sprite(ImageIO.read(getClass().getResource("/sprites/black_knight/tile000.png")));
-            AnimationSequence animationSequence = new AnimationSequence(8);
-            File tilesDir = new File(getClass().getResource("/sprites/green_knight/tile000.png").getPath());
-            var tileFiles = tilesDir.getParentFile().listFiles();
-            Arrays.sort(tileFiles);
+        blue = new Sprite(GameResources.getInstance()
+                .getStaticResourceAsImage("black_knight_static.png").get());
 
-            for (int i = 40; i < 50; i++){
-                animationSequence.add(ImageIO.read(tileFiles[i]));
-            }
-            red = new AnimatedSprite(new AnimationsMap(Map.of("test_animation", animationSequence)));
-            red.setActiveAnimationSequence("test_animation", AnimatingType.FORWARDED);
-            red.setIsAnimating(true);
+        var loadedAnimationMap = GameResources.getInstance()
+                .getAnimationMap("green_knight");
 
-        } catch (IOException e){
-            e.printStackTrace();
-        }
+
+        red = new AnimatedSprite(LockedAnimationMap.fromNonLocked(loadedAnimationMap, 10));
+        red.setActiveAnimationSequence("stand", AnimatingType.LOOPED);
+        red.setIsAnimating(true);
+
 
         renderingThread.addRenderable(blue);
         renderingThread.addRenderable(red);

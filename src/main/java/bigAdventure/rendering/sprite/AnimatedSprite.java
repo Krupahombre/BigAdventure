@@ -2,16 +2,14 @@ package bigAdventure.rendering.sprite;
 
 import bigAdventure.exceptions.InvalidAnimationException;
 import bigAdventure.rendering.NextFrameAction;
-import bigAdventure.rendering.animation.AnimatingType;
-import bigAdventure.rendering.animation.AnimationSequence;
-import bigAdventure.rendering.animation.AnimationsMap;
+import bigAdventure.rendering.animation.*;
 
 import java.awt.*;
 import java.util.Iterator;
 
 public class AnimatedSprite extends Sprite{
-    private final AnimationsMap availableAnimations;
-    private AnimationSequence activeAnimationSequence;
+    private final LockedAnimationMap availableAnimations;
+    private LockedAnimationSequence activeAnimationSequence;
     private Iterator<Image> currentAnimationFrameIterator;
     private float accumulatedTime;
     private boolean isAnimating = false;
@@ -22,8 +20,8 @@ public class AnimatedSprite extends Sprite{
      * @param singleSequence Single animation sequence this sprite will have
      * @param sequenceName Name of provided sequence
      */
-    public AnimatedSprite(AnimationSequence singleSequence, String sequenceName) {
-        this.availableAnimations = new AnimationsMap();
+    public AnimatedSprite(LockedAnimationSequence singleSequence, String sequenceName) {
+        this.availableAnimations = new LockedAnimationMap();
         this.availableAnimations.put(sequenceName, singleSequence);
     }
 
@@ -32,7 +30,7 @@ public class AnimatedSprite extends Sprite{
      * Note: animation will not start automatically.
      * @param availableAnimations Map of animations that will be available for this sprite
      */
-    public AnimatedSprite(AnimationsMap availableAnimations) {
+    public AnimatedSprite(LockedAnimationMap availableAnimations) {
         this.availableAnimations = availableAnimations;
     }
 
@@ -56,7 +54,7 @@ public class AnimatedSprite extends Sprite{
             throw new InvalidAnimationException(
                     String.format("Specified animation '%s' does not exist", activeAnimationSequence));
         this.activeAnimationSequence = animation;
-        this.currentAnimationFrameIterator = activeAnimationSequence.listIterator(0);
+        this.currentAnimationFrameIterator = activeAnimationSequence.iterator();
         this.currentAnimatingType = animatingType;
     }
 
@@ -75,18 +73,18 @@ public class AnimatedSprite extends Sprite{
     private void animate(){
         if (!isAnimating || this.activeAnimationSequence.isEmpty()) return;
         if (this.activeAnimationSequence.size() == 1){
-            this.setImage(this.activeAnimationSequence.get(0));
+            this.setImage(this.activeAnimationSequence.peek());
             return;
         }
 
         if (currentAnimatingType == AnimatingType.LOOPED){
             if (!this.currentAnimationFrameIterator.hasNext()){
-                this.currentAnimationFrameIterator = this.activeAnimationSequence.listIterator(0);
+                this.currentAnimationFrameIterator = this.activeAnimationSequence.iterator();
             }
             this.setImage(this.currentAnimationFrameIterator.next());
         } else if (currentAnimatingType == AnimatingType.ONCE){
             if (!this.currentAnimationFrameIterator.hasNext()) {
-                this.currentAnimationFrameIterator = this.activeAnimationSequence.listIterator(0);
+                this.currentAnimationFrameIterator = this.activeAnimationSequence.iterator();
                 this.setImage(this.currentAnimationFrameIterator.next());
                 isAnimating = false;
                 return;

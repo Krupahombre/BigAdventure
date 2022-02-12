@@ -1,14 +1,10 @@
 package bigAdventure.rendering.sprite;
 
-import bigAdventure.exceptions.InvalidAnimationException;
 import bigAdventure.rendering.NextFrameAction;
 import bigAdventure.rendering.Renderable;
-import bigAdventure.rendering.animation.AnimationSequence;
 
 import java.awt.*;
 import java.awt.geom.AffineTransform;
-import java.util.*;
-import java.util.List;
 
 public class Sprite implements Renderable {
     private Image image;
