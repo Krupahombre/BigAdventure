@@ -1,37 +1,19 @@
 package bigAdventure;
 
-import bigAdventure.exceptions.UnrecoverableGameResourceLoadingException;
-import bigAdventure.global.GameResources;
-import bigAdventure.gui.MainFrame;
-
-import javax.swing.*;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3Application;
+import com.badlogic.gdx.backends.lwjgl3.Lwjgl3ApplicationConfiguration;
 
 public class Application {
 
     public static void main(String[] args) {
-        System.setProperty("awt.useSystemAAFontSettings","on");
-        System.setProperty("swing.aatext", "true");
-        System.setProperty("sun.java2d.opengl", "true");
+        Lwjgl3ApplicationConfiguration configuration = new Lwjgl3ApplicationConfiguration();
+        configuration.enableGLDebugOutput(true, System.out);
+        configuration.setIdleFPS(60);
+        configuration.useVsync(true);
+        configuration.setWindowedMode(800,800);
+        configuration.setTitle("Big Adventure");
+        configuration.setResizable(true);
 
-
-        try {
-            var gameResources = new GameResources();
-        } catch (UnrecoverableGameResourceLoadingException e) {
-            e.printStackTrace();
-            JOptionPane.showConfirmDialog(null,
-                    e.getMessage(),
-                    "Critical error!",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.ERROR_MESSAGE);
-            System.exit(0);
-        }
-
-        SwingUtilities.invokeLater(() -> {
-            try{
-                new MainFrame().setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+        new Lwjgl3Application(new Boot(), configuration);
     }
 }
