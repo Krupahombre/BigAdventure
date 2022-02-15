@@ -4,29 +4,22 @@ import bigAdventure.global.GameResources;
 import bigAdventure.rendering.RenderCanvas;
 import bigAdventure.rendering.RenderingThread;
 import bigAdventure.rendering.animation.AnimatingType;
-import bigAdventure.rendering.animation.AnimationSequence;
-import bigAdventure.rendering.animation.AnimationsMap;
 import bigAdventure.rendering.animation.LockedAnimationMap;
 import bigAdventure.rendering.sprite.AnimatedSprite;
 import bigAdventure.rendering.sprite.Sprite;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
+import java.awt.event.*;
 import java.awt.geom.AffineTransform;
-import java.io.File;
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Map;
 
 public class ActionPanel extends JPanel {
 
     private final RenderingThread renderingThread;
     private final RenderCanvas renderCanvas;
-    private Sprite blue;
-    private AnimatedSprite red;
+    private final JLabel fpsLabel;
+    private final Sprite blue;
+    private final AnimatedSprite red;
 
     public ActionPanel() {
         this.setBackground(Color.WHITE);
@@ -46,18 +39,14 @@ public class ActionPanel extends JPanel {
         var loadedAnimationMap = GameResources.getInstance()
                 .getAnimationMap("green_knight");
 
-
         red = new AnimatedSprite(LockedAnimationMap.fromNonLocked(loadedAnimationMap, 10));
         red.setActiveAnimationSequence("stand", AnimatingType.LOOPED);
         red.setIsAnimating(true);
 
-
-        renderingThread.addRenderable(blue);
         renderingThread.addRenderable(red);
+        renderingThread.addRenderable(blue);
 
-        renderingThread.setRendering(true);
         SwingUtilities.invokeLater(() -> {
-            //renderCanvas.setSize(new Dimension(this.getWidth(), this.getHeight()));
             renderCanvas.initialize();
             this.addComponentListener(new ComponentAdapter() {
                 @Override
@@ -65,10 +54,46 @@ public class ActionPanel extends JPanel {
                     renderCanvas.initialize();
                 }
             });
+            renderingThread.setRendering(true);
             renderingThread.start();
         });
+
+
+        fpsLabel = new JLabel();
+        Timer fpsLabelTimer = new Timer( 100,
+                (e) -> fpsLabel.setText(String.format("FPS : %.2f", 1f/(renderingThread.getLastFrameTime() / 1000f)) ) );
+        fpsLabelTimer.start();
+        registerExperimentalKeyboardMovement();
+
         this.setVisible(true);
         this.add(renderCanvas, BorderLayout.CENTER);
+        this.add(fpsLabel, BorderLayout.NORTH);
+    }
+
+    public void registerExperimentalKeyboardMovement(){
+        this.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                requestFocusInWindow();
+            }
+        });
+        renderCanvas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseEntered(MouseEvent e) {
+                requestFocusInWindow();
+            }
+        });
+        this.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyCode()) {
+                    case KeyEvent.VK_D -> moveRed(1000, 0);
+                    case KeyEvent.VK_A -> moveRed(-1000, 0);
+                    case KeyEvent.VK_S -> moveRed(0, 1000);
+                    case KeyEvent.VK_W -> moveRed(0, -1000);
+                }
+            }
+        });
     }
 
     public void moveBlue(int offsetX, int offsetY){
